@@ -10,7 +10,10 @@ public class Main {
         boardGame.addPiece(0, "X");
         boardGame.addPiece(0, "X");
         boardGame.addPiece(0, "X");
-        boardGame.addPiece(0, "X");
+        System.out.println("....d");
         boardGame.printBoard();
+
+
+
     }
 }
