@@ -84,7 +84,7 @@ public class Board {
 
 /*
     // After the piece is dropped, it will check in all directions for 3 more consecutive pieces
-    public boolean checkWinner(int ROWS, int COLS) {
+    public boolean checkWinner() {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
                 char piece = Board[row][col];
