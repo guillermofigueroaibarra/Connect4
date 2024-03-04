@@ -23,14 +23,56 @@ public class Game {
 
     }
 
-    public int whoGoesFirst(){
-        // this function will decide which player goes first
-        Random rand = new Random();
-        int whoGoesFirst = rand.nextInt(1,3);
-        System.out.println(whoGoesFirst);
-        return whoGoesFirst;
+/*
+    private int validateInput(String[] args){
+        Scanner scanner = new Scanner(System.in);
+        int userInput = 0;
+        int inputReturn;
+
+        while (true) {
+            try {
+                System.out.print("Enter column Number: ");
+                userInput = Integer.parseInt(scanner.nextLine());
+
+                // Your validation condition
+                if (userInput >= 1 && userInput <= 7) {
+
+                    break; // Break out of the loop if input is valid
+
+                } else {
+                    System.out.println("Please enter a number between 1 and 7.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid number between 1 and 7.");
+            }
+        }return userInput;
+    }
+*/
+
+    public boolean checkWinner(int column){
+        String winnerColor;
+        if(is1playing) {
+            winnerColor = color1;
+        }else{
+            winnerColor = color2;
+        }
+
+
+        return board.checkWinner(column, winnerColor);
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     public void startGame() {
         boolean running = true;
@@ -38,6 +80,8 @@ public class Game {
 
         // turns
         while (running) {
+
+
             board.printBoard();
             String color;
             if (is1playing) {
@@ -50,12 +94,25 @@ public class Game {
             }
 
 
-            System.out.println("Enter column number to put piece in");
+            System.out.println("Enter a column number:");
             Scanner input = new Scanner(System.in);
-            int column = input.nextInt();
-            boolean success = board.addPiece(column, color);
 
+
+
+            int column = input.nextInt() - 1;
+            boolean success = board.addPiece(column, color);
             if (success) {
+                if (checkWinner(column)){
+                    board.printBoard();
+                    running = false;
+                    if(is1playing) {
+                        System.out.println("Player Number 1 won");
+                    }else{
+                        System.out.println("player Number 2 won");
+                    }
+
+            }
+
                 is1playing = !is1playing; // invert player
 
 

@@ -3,8 +3,8 @@ public class Main {
 
 
 
-    Game game = new Game("R", "Y");
-    game.startGame();
+        Game game = new Game("R", "Y");
+        game.startGame();
 
 
     }

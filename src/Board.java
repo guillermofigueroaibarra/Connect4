@@ -8,7 +8,7 @@ public class Board {
     private static final int columns = 7; //make columns constant
 
 
-    Piece [][]GameBoard = new Piece[rows][columns]; 
+    Piece [][]GameBoard = new Piece[rows][columns];
 
 
     public static int getColumns() {
@@ -19,6 +19,86 @@ public class Board {
         return rows;
     }
 
+    public boolean checkWinner(int col, String winnerColor){
+        boolean somebodyWon = false;
+        for(int row = 0; row < rows; row++){
+            if(GameBoard[row][col] != null){
+                int winningStreak = 3;
+
+                // check for winner in downward direction
+                for(int winRow = row + 1; winRow < rows; winRow++){
+                    if(GameBoard[winRow][col].getColor().equals(winnerColor)){
+                        winningStreak--;
+                        if(winningStreak == 0){
+                            somebodyWon = true;
+                        }
+                    } else {
+                        winningStreak = 3;
+                    }
+                }
+
+                winningStreak = 4;
+
+
+                // check for winner horizontally
+                for(int winCol = col - 3; winCol <= col + 3; winCol++){
+                    if(winCol < 0) continue;
+                    if(winCol >= columns)  break;
+                    if(GameBoard[row][winCol] != null && GameBoard[row][winCol].getColor().equals(winnerColor)) {
+                        winningStreak--;
+                        if(winningStreak == 0){
+                            somebodyWon = true;
+                        }
+                    }else{
+                        winningStreak = 4; // reset
+
+                    }
+
+                }
+
+                winningStreak = 4;
+
+
+                // check for winner left diagonally
+                for(int winRow = row - 3, winCol = col - 3; winRow <= row + 3 && winCol <= col +3; winRow++, winCol++){
+                    if(winRow < 0 || winCol < 0)continue;
+                    if(winRow >= rows || winCol >= columns) break;
+                    if(GameBoard[winRow][winCol] != null && GameBoard[winRow][winCol].getColor().equals(winnerColor)) {
+                        winningStreak--;
+                        if(winningStreak == 0){
+                            somebodyWon = true;
+                        }
+                    }else{
+                        winningStreak = 4; // reset
+
+                    }
+
+                }
+
+                winningStreak = 4;
+
+
+                // check for winner right diagonally
+                for(int winRow = row - 3, winCol = col + 3; winRow <= row + 3 && winCol >= col - 3; winRow++, winCol--){
+                    if(winRow < 0 || winCol>= columns)continue;
+                    if(winRow >= rows || winCol < 0) break;
+                    if(GameBoard[winRow][winCol] != null && GameBoard[winRow][winCol].getColor().equals(winnerColor)) {
+                        winningStreak--;
+                        if(winningStreak == 0){
+                            somebodyWon = true;
+                        }
+                    }else{
+                        winningStreak = 4; // reset
+
+                    }
+
+                }
+
+                break;
+            }
+        }
+        return somebodyWon;
+    }
 
 
     // add piece to the board method
@@ -52,6 +132,7 @@ public class Board {
 
 
 
+
     public void printBoard(){
         for(int col = 0; col < columns + 2; col++) System.out.print("-");
         System.out.println();
@@ -82,46 +163,6 @@ public class Board {
 
 
 
-/*
-    // After the piece is dropped, it will check in all directions for 3 more consecutive pieces
-    public boolean checkWinner() {
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLS; col++) {
-                char piece = Board[row][col];
-                if (piece != empty) {
-                    // Check horizontally (left and right)
-                    if (col + 3 < COLS &&
-                            piece == board[row][col + 1] &&
-                            piece == board[row][col + 2] &&
-                            piece == board[row][col + 3]) {
-                        return true;
-                    }
-                    // Check vertically (up and down)
-                    if (row + 3 < ROWS &&
-                            piece == board[row + 1][col] &&
-                            piece == board[row + 2][col] &&
-                            piece == board[row + 3][col]) {
-                        return true;
-                    }
-                    // Check diagonally (positive slope)
-                    if (row + 3 < ROWS && col + 3 < COLS &&
-                            piece == board[row + 1][col + 1] &&
-                            piece == board[row + 2][col + 2] &&
-                            piece == board[row + 3][col + 3]) {
-                        return true;
-                    }
-                    // Check diagonally (negative slope)
-                    if (row - 3 >= 0 && col + 3 < COLS &&
-                            piece == board[row - 1][col + 1] &&
-                            piece == board[row - 2][col + 2] &&
-                            piece == board[row - 3][col + 3]) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }*/
 
 
 
