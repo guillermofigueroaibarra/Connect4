@@ -1,3 +1,4 @@
+
 import java.util.Random;
 import java.util.Scanner;
 
@@ -12,23 +13,25 @@ public class Game {
     private boolean playingFirst;
 
 
-   
-
-
     public Game() {
         this.board = new Board();
-        this.color1 = color1;
-        this.color2 = color2;
         playingFirst = (new Random().nextBoolean()); // use random to determine which player starts the game
 
     }
 
 
-    public boolean checkWinner(int column){
+
+    public void reset(){
+        // this function will reset the game if user decides to play another round
+        this.board = new Board();
+        playingFirst = (new Random()).nextBoolean();
+    }
+
+    public boolean checkWinner(int column) {
         String winnerColor;
-        if(playingFirst) {
+        if (playingFirst) {
             winnerColor = color1;
-        }else{
+        } else {
             winnerColor = color2;
         }
         return board.checkWinner(column, winnerColor);
@@ -36,9 +39,47 @@ public class Game {
     }
 
 
+    public  void singleGame() {
+        // this function will run a single entire Game
+
+        boolean gameRunning = true;
+        while (gameRunning) { // while gameRunning condition is true game will keep running
+            board.printBoard();
+            String color;
+            if (playingFirst) {
+                color = color1;
+                System.out.println("Player 1's turn");
+            } else {
+                color = color2;
+                System.out.println("Player 2's turn");
+
+            }
+
+            int userInput = validateInput(); // call function to read and validate users input
+            int column = userInput - 1;
+            boolean successfullyAdded = board.addPiece(column, color);
+            if (successfullyAdded) {
+                if (checkWinner(column)) { // if winner found, board will print and gameRunning will be set to false to end game
+                    board.printBoard();
+                    gameRunning = false;
+
+                    // find out who won
+                    if (playingFirst) {
+                        System.out.println("Player Number 1 won");
+                    } else {
+                        System.out.println("player Number 2 won");
+                    }
 
 
+                }
 
+                playingFirst = !playingFirst; // invert player so is the other player's turn
+
+
+            }
+        }
+
+    }
 
 
     private static int validateInput() {
@@ -69,51 +110,29 @@ public class Game {
 
 
 
-
     public void startGame() {
-
-        boolean gameRunning = true;
-
-
-
-        while (gameRunning) { // while gameRunning condition is true game will keep running
-            board.printBoard();
-            String color;
-            if (playingFirst) {
-                color = color1;
-                System.out.println("Player 1's turn");
-            } else {
-                color = color2;
-                System.out.println("Player 2's turn");
-
-            }
+        Scanner scanner = new Scanner(System.in);
+       String i;
 
 
-            int userInput = validateInput(); // call function to read and validate users input
+
+        do{
+
+            // play a single game and ask user if they would like to play again
+            // if users input is "yes" the loop will continue and the reset function will reset the board
+            singleGame();
+            System.out.println("Would you like to play again?");
+            i = scanner.nextLine();
+            reset();
 
 
-            int column = userInput - 1;
-            boolean success = board.addPiece(column, color);
-            if (success) {
-                if (checkWinner(column)){ // if winner found, board will print and gameRunning will be set to falsa to end game
-                    board.printBoard();
-                    gameRunning = false;
-                    if(playingFirst) {
-                        System.out.println("Player Number 1 won");
-                    }else{
-                        System.out.println("player Number 2 won");
-                    }
-
-            }
-
-                playingFirst = !playingFirst; // invert player so is the other player's turn
-
-
-            }
         }
+        while (i.equals("yes"));
+        scanner.close();
+
+
+        System.out.println("Game is over");
 
     }
-
-
 }
 

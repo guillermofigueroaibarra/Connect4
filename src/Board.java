@@ -99,7 +99,7 @@ public class Board {
 
     // add piece to the board method
     public boolean addPiece(int addToColumn, String color){
-        if(addToColumn >= 0 && addToColumn < columns){ // if the integer given by user is in the columns range, then add
+        if(addToColumn >= 0 && addToColumn < columns ){ // if the integer given by user is in the columns range, then add
             if(GameBoard[0][addToColumn]== null){ // check if spot in board is empty
                 boolean wasPieceAdded = false;
                 for (int row = rows - 1; row >= 0; row--){
@@ -112,15 +112,14 @@ public class Board {
 
                 }
                 return wasPieceAdded;
-            } else { // otherwise column is full, error message to be displayed
-                // row is full
-                System.err.println("this column is full");
+            } else {
+                System.err.println("this column is full, please choose another one"); // error message if colum is full
                 return false;
 
             }
 
-        }else{ // otherwise integer or input given is out of range, error message to be displayed
-            System.err.println("This is out of the range, choose between  0 and 5");
+        }else{
+
             return false;
         }
 
