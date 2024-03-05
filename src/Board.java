@@ -25,6 +25,7 @@ public class Board {
             if(GameBoard[row][col] != null){
                 int winningStreak = 3;
 
+
                 // check for winner in downward direction
                 for(int winRow = row + 1; winRow < rows; winRow++){
                     if(GameBoard[winRow][col].getColor().equals(winnerColor)){
@@ -51,12 +52,10 @@ public class Board {
                         }
                     }else{
                         winningStreak = 4; // reset
-
                     }
-
                 }
-
                 winningStreak = 4;
+
 
 
                 // check for winner left diagonally
@@ -70,11 +69,8 @@ public class Board {
                         }
                     }else{
                         winningStreak = 4; // reset
-
                     }
-
                 }
-
                 winningStreak = 4;
 
 
@@ -134,7 +130,7 @@ public class Board {
 
 
     public void printBoard(){
-        for(int col = 0; col < columns + 2; col++) System.out.print("-");
+        for(int col = 0; col < columns + 2; col++) System.out.print("--");
         System.out.println();
         for(int row = 0; row< rows; row++){
             System.out.print("|");
@@ -148,7 +144,7 @@ public class Board {
             }
             System.out.println();
         }
-        for(int col = 0; col < columns + 2; col++) System.out.print("-");
+        for(int col = 0; col < columns + 2; col++) System.out.print("--");
         System.out.println();
     }
 

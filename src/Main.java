@@ -3,7 +3,7 @@ public class Main {
 
 
 
-        Game game = new Game("R", "Y");
+        Game game = new Game();
         game.startGame();
 
 

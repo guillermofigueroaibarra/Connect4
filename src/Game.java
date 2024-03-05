@@ -4,60 +4,33 @@ import java.util.Scanner;
 public class Game {
 
     private Board board;
-    private String color1;
-    private String color2;
+    private String color1 = "R";
+    private String color2 = "Y";
 
 
     // true if players turn
-    private boolean is1playing;
+    private boolean playingFirst;
 
 
-    //false if players 2 turn
+   
 
 
-    public Game(String color1, String color2) {
+    public Game() {
         this.board = new Board();
         this.color1 = color1;
         this.color2 = color2;
-        is1playing = (new Random().nextBoolean());
+        playingFirst = (new Random().nextBoolean()); // use random to determine which player starts the game
 
     }
 
-/*
-    private int validateInput(String[] args){
-        Scanner scanner = new Scanner(System.in);
-        int userInput = 0;
-        int inputReturn;
-
-        while (true) {
-            try {
-                System.out.print("Enter column Number: ");
-                userInput = Integer.parseInt(scanner.nextLine());
-
-                // Your validation condition
-                if (userInput >= 1 && userInput <= 7) {
-
-                    break; // Break out of the loop if input is valid
-
-                } else {
-                    System.out.println("Please enter a number between 1 and 7.");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a valid number between 1 and 7.");
-            }
-        }return userInput;
-    }
-*/
 
     public boolean checkWinner(int column){
         String winnerColor;
-        if(is1playing) {
+        if(playingFirst) {
             winnerColor = color1;
         }else{
             winnerColor = color2;
         }
-
-
         return board.checkWinner(column, winnerColor);
 
     }
@@ -68,25 +41,47 @@ public class Game {
 
 
 
+    private static int validateInput() {
+        // This function validates user input and loops until user enters valid input
+        System.out.println("Enter a column number:");
+        Scanner scanner = new Scanner(System.in);
+        int userInput = 0;
 
+        while (true) {
+            try {
+                System.out.print("Enter a row number between 1-7: ");
+                userInput = Integer.parseInt(scanner.nextLine());
+
+                //  validation condition
+                if (userInput >= 1 && userInput <= 7) {
+                    break; // Break out of the loop if input is valid
+                } else {
+                    System.out.println("Please enter a number between 1 and 7.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input Please enter a valid number between 1-7.");
+            }
+        }
+
+        return userInput;
+    }
 
 
 
 
 
     public void startGame() {
-        boolean running = true;
+
+        boolean gameRunning = true;
 
 
-        // turns
-        while (running) {
 
-
+        while (gameRunning) { // while gameRunning condition is true game will keep running
             board.printBoard();
             String color;
-            if (is1playing) {
+            if (playingFirst) {
                 color = color1;
-                System.out.println("Player 1's turn!");
+                System.out.println("Player 1's turn");
             } else {
                 color = color2;
                 System.out.println("Player 2's turn");
@@ -94,18 +89,16 @@ public class Game {
             }
 
 
-            System.out.println("Enter a column number:");
-            Scanner input = new Scanner(System.in);
+            int userInput = validateInput(); // call function to read and validate users input
 
 
-
-            int column = input.nextInt() - 1;
+            int column = userInput - 1;
             boolean success = board.addPiece(column, color);
             if (success) {
-                if (checkWinner(column)){
+                if (checkWinner(column)){ // if winner found, board will print and gameRunning will be set to falsa to end game
                     board.printBoard();
-                    running = false;
-                    if(is1playing) {
+                    gameRunning = false;
+                    if(playingFirst) {
                         System.out.println("Player Number 1 won");
                     }else{
                         System.out.println("player Number 2 won");
@@ -113,7 +106,7 @@ public class Game {
 
             }
 
-                is1playing = !is1playing; // invert player
+                playingFirst = !playingFirst; // invert player so is the other player's turn
 
 
             }
