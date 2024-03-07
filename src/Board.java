@@ -11,13 +11,7 @@ public class Board {
     Piece [][]GameBoard = new Piece[rows][columns];
 
 
-    public static int getColumns() {
-        return columns;
-    }
 
-    public static int getRows() {
-        return rows;
-    }
 
     public boolean checkWinner(int col, String winnerColor){
         boolean somebodyWon = false;
@@ -98,29 +92,31 @@ public class Board {
 
 
     // add piece to the board method
-    public boolean addPiece(int addToColumn, String color){
+    public int addPiece(int addToColumn, String color){
         if(addToColumn >= 0 && addToColumn < columns ){ // if the integer given by user is in the columns range, then add
             if(GameBoard[0][addToColumn]== null){ // check if spot in board is empty
                 boolean wasPieceAdded = false;
+                int addedRow = -1;
                 for (int row = rows - 1; row >= 0; row--){
                     if(GameBoard[row][addToColumn] ==null){
                         GameBoard[row][addToColumn] = new Piece();
                         GameBoard[row][addToColumn].setColor(color);
                         wasPieceAdded = true;
+                        addedRow = row;
                         break;
                     }
 
                 }
-                return wasPieceAdded;
+                return addedRow;
             } else {
                 System.err.println("this column is full, please choose another one"); // error message if colum is full
-                return false;
+                return -1;
 
             }
 
         }else{
 
-            return false;
+            return -1;
         }
 
     }

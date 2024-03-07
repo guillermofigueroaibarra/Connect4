@@ -2,6 +2,13 @@
 import java.util.Random;
 import java.util.Scanner;
 
+
+
+
+
+
+
+
 public class Game {
 
     private Board board;
@@ -10,7 +17,13 @@ public class Game {
 
 
     // true if players turn
+
+    public boolean isPlayingFirst() {
+        return playingFirst;
+    }
+
     private boolean playingFirst;
+
 
 
     public Game() {
@@ -21,11 +34,14 @@ public class Game {
 
 
 
+
+
     public void reset(){
         // this function will reset the game if user decides to play another round
         this.board = new Board();
         playingFirst = (new Random()).nextBoolean();
     }
+
 
     public boolean checkWinner(int column) {
         String winnerColor;
@@ -37,6 +53,47 @@ public class Game {
         return board.checkWinner(column, winnerColor);
 
     }
+
+
+
+
+    public boolean checkWinnerGUI(int column) {
+        String winnerColor;
+
+        // inverting
+        if (!playingFirst) {
+            winnerColor = color1;
+        } else {
+            winnerColor = color2;
+        }
+        return board.checkWinner(column, winnerColor);
+
+    }
+
+
+    public int round(int col){
+        // this function parameter is the column where piece will be added
+        // this function will return -1 if unsuccessfully or integer of column if it was successful
+      int row  = -1;
+        String color = playingFirst ? color1:color2;
+        System.out.println("round" + color);
+        row= board.addPiece(col, color);
+        if (row != -1)playingFirst = !playingFirst; // invert player so is the other player's turn
+
+        return row;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public  void singleGame() {
@@ -57,9 +114,9 @@ public class Game {
 
             int userInput = validateInput(); // call function to read and validate users input
             int column = userInput - 1;
-            boolean successfullyAdded = board.addPiece(column, color);
-            if (successfullyAdded) {
-                if (checkWinner(column)) { // if winner found, board will print and gameRunning will be set to false to end game
+            int successfullyAdded = board.addPiece(column, color);
+            if (successfullyAdded != -1) {
+                if (checkWinner(column)) { // if winner found, board will print and gameRunning variable is set to false
                     board.printBoard();
                     gameRunning = false;
 
@@ -86,7 +143,7 @@ public class Game {
         // This function validates user input and loops until user enters valid input
         System.out.println("Enter a column number:");
         Scanner scanner = new Scanner(System.in);
-        int userInput = 0;
+        int userInput;
 
         while (true) {
             try {
