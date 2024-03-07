@@ -16,13 +16,17 @@ public class Game {
     private String color2 = "Y";
 
 
-    // true if players turn
+    private boolean playingFirst;
 
+
+
+
+    // return true/false if playing first are red pieces
     public boolean isPlayingFirst() {
         return playingFirst;
     }
 
-    private boolean playingFirst;
+
 
 
 
@@ -58,8 +62,8 @@ public class Game {
 
 
     public boolean checkWinnerGUI(int column) {
+       // this function will check for a winner in GUI
         String winnerColor;
-
         // inverting
         if (!playingFirst) {
             winnerColor = color1;
@@ -76,10 +80,8 @@ public class Game {
         // this function will return -1 if unsuccessfully or integer of column if it was successful
       int row  = -1;
         String color = playingFirst ? color1:color2;
-        System.out.println("round" + color);
         row= board.addPiece(col, color);
         if (row != -1)playingFirst = !playingFirst; // invert player so is the other player's turn
-
         return row;
     }
 
@@ -98,7 +100,6 @@ public class Game {
 
     public  void singleGame() {
         // this function will run a single entire Game
-
         boolean gameRunning = true;
         while (gameRunning) { // while gameRunning condition is true game will keep running
             board.printBoard();
@@ -170,9 +171,6 @@ public class Game {
     public void startGame() {
         Scanner scanner = new Scanner(System.in);
        String i;
-
-
-
         do{
 
             // play a single game and ask user if they would like to play again
@@ -181,15 +179,10 @@ public class Game {
             System.out.println("Would you like to play again?");
             i = scanner.nextLine();
             reset();
-
-
         }
         while (i.equals("yes"));
         scanner.close();
-
-
         System.out.println("Game is over");
-
     }
 }
 

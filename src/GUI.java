@@ -2,6 +2,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.net.URL;
+import java.util.Random;
 import java.util.Scanner;
 import javax.swing.*;
 
@@ -16,7 +17,8 @@ public class GUI extends JFrame {
     private String yellowTitle = "Connect 4 --- YELLOW PIECE TURN";
     private String redTitle = "Connect 4 --- RED PIECE TURN";
 
-
+    private String winRed = "RED PIECES WON!";
+    private String winYellow = "YELLOW PIECES WON!";
     int rows = 6; // make rows constant
     int columns = 7; //make columns constant
 
@@ -39,10 +41,16 @@ public class GUI extends JFrame {
     private ImageIcon iconYellow = null;
 
 
-
+    int ranNum = new Random().nextInt(1, 7);
+    int ranNumr = new Random().nextInt(1, 6);
 
     public void resetBoard() {
-        int reply = JOptionPane.showConfirmDialog(null, "Do you like to play again?", null, JOptionPane.YES_NO_OPTION);
+        /*
+        this function resets the Board and switches the images to empty spaces,
+        When a winner is found, a pop up window will appear asking user if they want to play again
+        if user says yes, the board will be reset it and images will switch to empty, otherwise it'll close the window
+         */
+        int reply = JOptionPane.showConfirmDialog(null, "Would you like to play again?", null, JOptionPane.YES_NO_OPTION);
         if(reply == JOptionPane.YES_OPTION) {
             game.reset();
             for(int row = 0; row < rows; row++)
@@ -60,28 +68,36 @@ public class GUI extends JFrame {
     private void updateBoard(JButton button){
         int row10plusCol = Integer.parseInt(button.getName());
         int col = row10plusCol % 10;
-
-
+        String winner;
 
         // find who is the next color piece to play and display it as the window title
         boolean playerTurn = game.isPlayingFirst();
-        if(!playerTurn) setTitle(redTitle);
-        else setTitle(yellowTitle);
 
+        // update window titles and set winner message to its respective winner
+        if(!playerTurn) {
+            setTitle(redTitle);
+            winner = winYellow;
+        }else {
+            setTitle(yellowTitle);
+            winner = winRed;
+        }
 
-        int addedRow = game.round(col);
-        if(addedRow != -1){
+        int addedRow = game.round(col); // check if piece can be successfully added
+        if(addedRow != -1){ // if piece was added then run the following code
             JButton buttonUpdate = ((JButton)(window.getComponent(columns * addedRow + col)));
             // inverting players as round ended
             if(game.isPlayingFirst()) buttonUpdate.setIcon(iconYellow);
             else buttonUpdate.setIcon(iconRed);
+
             if(game.checkWinnerGUI(col)) {
-                JOptionPane.showMessageDialog(null, "You Won");
+                JOptionPane.showMessageDialog(null, winner);
                 resetBoard();
             }
+            // if the piece is not successfully added with the "round" function, then an error message is to be displayed
         } else{
-           JOptionPane.showMessageDialog(null, "Please enter a valid position number!");
+           JOptionPane.showMessageDialog(null, "Please enter valid unoccupied column number!");
         }
+
 
     }
 
@@ -92,12 +108,12 @@ public class GUI extends JFrame {
 
     public GUI() {
 
-
-
+            // create a Game object
             game = new Game();
 
-            // set up color icons
 
+
+            // set up color icons
             // empty icon, if empty icon image is not found, error message is to be displayed
             URL imgURL = getClass().getClassLoader().getResource(imgEmptyFilename);
             if (imgURL != null) iconEmpty = new ImageIcon(imgURL);
@@ -114,16 +130,24 @@ public class GUI extends JFrame {
             else System.err.println("Could not find file: " + imgYellowFilename);
 
 
-            window = getContentPane();
-            window.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+
+            window = getContentPane(); // create window container
+            window.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0)); // window position
 
 
+            // creates the grid with board empty spaces
+            // assigns a name to each space
             for (int row = 0; row < rows; row++)
                 for (int col = 0; col < columns; col++) {
-                    JButton button = new JButton();
-                    button.setIcon(iconEmpty);
-                    button.setPreferredSize(new Dimension(100, 100));
-                    button.setName(Integer.toString((row * 10 + col)));
+                    JButton button = new JButton();     // create a new button
+                    button.setIcon(iconEmpty);          // set the empty icon to the new button created
+                    button.setPreferredSize(new Dimension(100, 100)); // button size
+                    button.setName(Integer.toString((row * 10 + col))); // assigned a name to the button depending on its location in the grid
+                    // button name will be determined by the row * 10 + col and this integer will then be converted to the string that will be the buttons name/label
+
+
+
+                    // if one of the buttons of the grid is clicked, the board will update
                     button.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent actionEvent) {
@@ -134,47 +158,17 @@ public class GUI extends JFrame {
                 }
 
             
-             /*
-
-        JTabbedPane tabPanel = new JTabbedPane(JTabbedPane.LEFT);
-
-
-        // Create the first tab (page1) and add a JLabel to it
-        JPanel page1 = new JPanel();
-        page1.add(new JLabel("This is Tab 1"));
-
-        // Create the second tab (page2) and add a JLabel to it
-        JPanel page2 = new JPanel();
-        page2.add(new JLabel("This is Tab 2"));
-
-        // Create the third tab (page3) and add a JLabel to it
-        JPanel page3 = new JPanel();
-        page3.add(new JLabel("This is Tab 3"));
-
-        // Add the three tabs to the JTabbedPane
-        tabPanel.addTab("Tab 1", page1);
-        tabPanel.addTab("Tab 2", page2);
-        tabPanel.addTab("Tab 3", page3);
-
-        // Add the JTabbedPane to the JFrame's content
-        window.add(tabPanel);
-         */
-
-       
-
-
-
 
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // find who is the first color piece to play and display it as the window title
-             boolean playerTurn = game.isPlayingFirst();
+             // find who is the first color piece to play and display it as the window title
+            boolean playerTurn = game.isPlayingFirst();
             if(playerTurn) setTitle(redTitle);
             else setTitle(yellowTitle);
 
 
             setLocationRelativeTo(null); // center window on the screen
-            setSize(widthWindow, heightWindow);
+            setSize(widthWindow, heightWindow); // window size
             setVisible(true);
 
 
@@ -184,4 +178,6 @@ public class GUI extends JFrame {
 
 
     }
+
+
 }
