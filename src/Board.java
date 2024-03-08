@@ -10,8 +10,9 @@ public class Board {
 
     Piece [][]GameBoard = new Piece[rows][columns];
 
-
-
+    public static int getColumns() {
+        return columns;
+    }
 
     public boolean checkWinner(int col, String winnerColor){
         boolean somebodyWon = false;
@@ -90,7 +91,32 @@ public class Board {
         return somebodyWon;
     }
 
+    public boolean addPieceAI(int addToColumn, String color){
+        if(addToColumn >= 0 && addToColumn < columns ){ // if the integer given by user is in the columns range, then add
+            if(GameBoard[0][addToColumn]== null){ // check if spot in board is empty
+                boolean wasPieceAdded = false;
+                for (int row = rows - 1; row >= 0; row--){
+                    if(GameBoard[row][addToColumn] ==null){
+                        GameBoard[row][addToColumn] = new Piece();
+                        GameBoard[row][addToColumn].setColor(color);
+                        wasPieceAdded = true;
+                        break;
+                    }
 
+                }
+                return wasPieceAdded;
+            } else {
+                System.err.println("this column is full, please choose another one"); // error message if colum is full
+                return false;
+
+            }
+
+        }else{
+
+            return false;
+        }
+
+    }
     // add piece to the board method
     public int addPiece(int addToColumn, String color){
         if(addToColumn >= 0 && addToColumn < columns ){ // if the integer given by user is in the columns range, then add

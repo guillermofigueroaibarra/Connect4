@@ -41,8 +41,7 @@ public class GUI extends JFrame {
     private ImageIcon iconYellow = null;
 
 
-    int ranNum = new Random().nextInt(1, 7);
-    int ranNumr = new Random().nextInt(1, 6);
+
 
     public void resetBoard() {
         /*
@@ -170,8 +169,8 @@ public class GUI extends JFrame {
             setLocationRelativeTo(null); // center window on the screen
             setSize(widthWindow, heightWindow); // window size
             setVisible(true);
-
-
+            window.setBackground(Color.LIGHT_GRAY);
+            setResizable(false);
 
 
 

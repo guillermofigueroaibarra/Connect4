@@ -15,7 +15,7 @@ public class Game {
     private String color1 = "R";
     private String color2 = "Y";
 
-
+    private AIPlayer aiPlayer; // Add AIPlayer instance
     private boolean playingFirst;
 
 
@@ -32,6 +32,7 @@ public class Game {
 
     public Game() {
         this.board = new Board();
+        this.aiPlayer = new AIPlayer(); // Initialize AIPlayer instance
         playingFirst = (new Random().nextBoolean()); // use random to determine which player starts the game
 
     }
@@ -90,53 +91,41 @@ public class Game {
 
 
 
-
-
-
-
-
-
-
-
-    public  void singleGame() {
-        // this function will run a single entire Game
+    public void singleGame() {
         boolean gameRunning = true;
-        while (gameRunning) { // while gameRunning condition is true game will keep running
+        while (gameRunning) {
             board.printBoard();
             String color;
+            int column;
+
             if (playingFirst) {
                 color = color1;
                 System.out.println("Player 1's turn");
+                column = validateInput();
             } else {
                 color = color2;
-                System.out.println("Player 2's turn");
-
+                System.out.println("AI's turn");
+                column = aiPlayer.makeMove();
+                System.out.println("AI chose column " + (column + 1)); // Adjust for 0-based index
             }
 
-            int userInput = validateInput(); // call function to read and validate users input
-            int column = userInput - 1;
-            int successfullyAdded = board.addPiece(column, color);
-            if (successfullyAdded != -1) {
-                if (checkWinner(column)) { // if winner found, board will print and gameRunning variable is set to false
+            boolean successfullyAdded = board.addPieceAI(column, color);
+
+            if (successfullyAdded) {
+                if (checkWinner(column)) {
                     board.printBoard();
                     gameRunning = false;
 
-                    // find out who won
                     if (playingFirst) {
                         System.out.println("Player Number 1 won");
                     } else {
-                        System.out.println("player Number 2 won");
+                        System.out.println("AI won");
                     }
-
-
                 }
 
-                playingFirst = !playingFirst; // invert player so is the other player's turn
-
-
+                playingFirst = !playingFirst;
             }
         }
-
     }
 
 
